@@ -11,6 +11,8 @@
     </div>
   </div>
 
+
+  <!-- Donde se van a poder a gregar las tarjetas y la listas de estas -->
   <div class="row mt-4">
 
     <!-- Agregar tarjetas -->
@@ -27,12 +29,26 @@
       <div class="card">
         <div class="card-body">
           <h5 class="titulo">Listado de tarjetas</h5>
-
+          <table class="table">
+            <tbody cl>
+              <tr *ngFor="let item of listTarjetas">
+                <td>{{ item.titular }}</td>
+                <td>{{item.numeroTarjeta}}</td>
+                <td>{{item.fechaExpiracion}}</td>
+                <td>
+                  <i class="fa-solid fa-pen-to-square text-primary"></i>
+                </td>
+                <td>
+                  <i class="fa-solid fa-trash text-danger"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-
       </div>
     </div>
 
-
   </div>
+
+
 </div>
