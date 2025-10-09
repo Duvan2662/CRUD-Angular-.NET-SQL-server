@@ -52,6 +52,14 @@ export class TarjetaCreditoComponent {
 
   }
 
+  /**
+   * name
+   */
+  public eliminarTarjeta(index:number) {
+    this.listTarjetas.splice(index,1);
+    this.toastr.error('Tarjeta eliminada', 'La tarjeta fue eliminada con exito!');
+  }
+
 
 
 }
