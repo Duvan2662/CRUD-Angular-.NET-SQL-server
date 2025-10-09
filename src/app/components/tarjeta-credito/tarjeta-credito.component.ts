@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormGroup, ReactiveFormsModule,FormBuilder, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-tarjeta-credito',
@@ -17,12 +18,16 @@ export class TarjetaCreditoComponent {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private toastr: ToastrService
+  )
+  {
     this.form = this.fb.group({
-      titular: ['',Validators.required],
-      numeroTarjeta: ['',[Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
-      fechaExpiracion: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
-      cvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]]
+    titular: ['',Validators.required],
+    numeroTarjeta: ['',[Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
+    fechaExpiracion: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
+    cvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]]
     });
 
   }
@@ -42,10 +47,11 @@ export class TarjetaCreditoComponent {
     console.log(nuevaTarjeta);
 
     this.listTarjetas.push(nuevaTarjeta);
+    this.toastr.success('Tarjeta registrada', 'La tarjeta fue registrada con exito!');
     this.form.reset();
 
   }
 
-  
+
 
 }
