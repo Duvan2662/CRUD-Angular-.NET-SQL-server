@@ -25,7 +25,12 @@
 
             <div class="input-group mb-3">
               <span class="input-group-text">
-                <i class="fa-solid fa-user"></i>
+                <i
+                  class="fa-solid fa-user"
+                  [class.green-icon] = "this.form.get('titular')?.valid"
+                  [class.red-icon] = "this.form.get('titular')?.invalid && this.form.get('titular')?.touched"
+                >
+                </i>
               </span>
               <input
                 type="text"
@@ -37,13 +42,19 @@
 
             <div class="input-group mb-3">
               <span class="input-group-text">
-                <i class="fa-regular fa-credit-card"></i>
+                <i
+                  class="fa-regular fa-credit-card"
+                  [class.green-icon] = "this.form.get('numeroTarjeta')?.valid"
+                  [class.red-icon] = "this.form.get('numeroTarjeta')?.invalid && this.form.get('numeroTarjeta')?.touched"
+                >
+              </i>
               </span>
               <input
                 type="text"
                 class="form-control"
                 placeholder="Tarjeta"
                 formControlName="numeroTarjeta"
+                maxlength="16"
                 >
             </div>
 
@@ -52,13 +63,19 @@
               <div class="col-lg-7">
                 <div class="input-group mb-3">
                   <span class="input-group-text">
-                    <i class="fa-solid fa-calendar"></i>
+                    <i
+                      class="fa-solid fa-calendar"
+                      [class.green-icon] = "this.form.get('fechaExpiracion')?.valid"
+                      [class.red-icon] = "this.form.get('fechaExpiracion')?.invalid && this.form.get('fechaExpiracion')?.touched"
+                    >
+                  </i>
                   </span>
                   <input
                     type="text"
                     class="form-control"
                     placeholder="MM/YY"
                     formControlName="fechaExpiracion"
+                    maxlength="5"
                     >
                 </div>
               </div>
@@ -66,13 +83,19 @@
               <div class="col-lg-5">
                 <div class="input-group mb-3">
                   <span class="input-group-text">
-                    <i class="fa-solid fa-key"></i>
+                    <i
+                      class="fa-solid fa-key"
+                      [class.green-icon] = "this.form.get('cvv')?.valid"
+                      [class.red-icon] = "this.form.get('cvv')?.invalid && this.form.get('cvv')?.touched"
+                    >
+                  </i>
                   </span>
                   <input
                     type="password"
                     class="form-control"
                     placeholder="CVV"
                     formControlName="cvv"
+                    maxlength="3"
                     >
                 </div>
               </div>
@@ -80,7 +103,7 @@
 
 
             <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-success btn-lg">Agregar</button>
+            <button [disabled]="this.form.invalid" type="submit" class="btn btn-success btn-lg">Agregar</button>
             </div>
 
           </form>
