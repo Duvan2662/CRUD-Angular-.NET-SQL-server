@@ -13,16 +13,9 @@ import { TarjetaServicesService } from '../../services/tarjeta-services.service'
 export class TarjetaCreditoComponent {
 
 
-  tarjetaClase= {
-    titular: '',
-    numeroTarjeta: '',
-    fechaExpiracion: '',
-  }
 
-  listTarjetas: any[] = [
-    { titular: 'Juan Perez', numeroTarjeta: '1234 5678 9012 3456', fechaExpiracion: '12/24', cvv: '123' },
-    { titular: 'Maria Lopez', numeroTarjeta: '9876 5432 1098 7654', fechaExpiracion: '11/23', cvv: '456' }
-  ];
+
+  listTarjetas: any[] = [];
 
   form: FormGroup;
 
@@ -68,8 +61,15 @@ export class TarjetaCreditoComponent {
    * name
    */
   public eliminarTarjeta(index:number) {
-    this.listTarjetas.splice(index,1);
-    this.toastr.error('Tarjeta eliminada', 'La tarjeta fue eliminada con exito!');
+    console.log(index);
+
+    this.tarjetaService.deleteTarjeta(index).subscribe(data => {
+      this.toastr.error('Tarjeta eliminada', 'La tarjeta fue eliminada con exito!');
+      this.obtenerTarjetas();
+    }, error => {
+      console.log(error);
+    });
+
   }
 
   /**
@@ -78,13 +78,13 @@ export class TarjetaCreditoComponent {
   public obtenerTarjetas() {
     this.tarjetaService.getAllTarjetas().subscribe(data => {
       console.log(data);
-      for (let tarjeta of data) {
-        this.listTarjetas.push({
-          "titular":tarjeta.titulas,
-          "numeroTarjeta":tarjeta.numeroTarjeta,
-          "fechaExpiracion":tarjeta.fechaExpiracion,
-          "cvv":tarjeta.cvv});
-      }
+      this.listTarjetas = data.map((tarjeta: any) => ({
+      id: tarjeta.id,
+      titular: tarjeta.titulas, // <-- ojo, era 'titulas' mal escrito
+      numeroTarjeta: tarjeta.numeroTarjeta,
+      fechaExpiracion: tarjeta.fechaExpiracion,
+      cvv: tarjeta.cvv
+    }));
     }, error => {
       console.log(error);
     });

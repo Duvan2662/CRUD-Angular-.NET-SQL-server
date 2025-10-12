@@ -10,7 +10,13 @@ export class TarjetaServicesService {
   Backend_Url = 'https://localhost:7275/api/Tarjeta';
 
   constructor(private http:HttpClient) { }
+
   getAllTarjetas(): Observable<any>{
     return this.http.get(this.Backend_Url);
   }
+
+  deleteTarjeta(id:number): Observable<any>{
+    return this.http.delete(this.Backend_Url + '/' + id);
+  }
+
 }
