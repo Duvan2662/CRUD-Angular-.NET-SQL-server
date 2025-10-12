@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormGroup, ReactiveFormsModule,FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { TarjetaServicesService } from '../../services/tarjeta-services.service';
 
 @Component({
   selector: 'app-tarjeta-credito',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './tarjeta-credito.component.html',
   styleUrl: './tarjeta-credito.component.css'
 })
@@ -16,6 +16,10 @@ export class TarjetaCreditoComponent {
 
 
   listTarjetas: any[] = [];
+  accion: string = 'Agregar';
+  cambiarBoton: string = 'Agregar';
+  state: boolean = false;
+  idEditar: number | undefined;
 
   form: FormGroup;
 
@@ -23,13 +27,12 @@ export class TarjetaCreditoComponent {
     private fb: FormBuilder,
     private toastr: ToastrService,
     private tarjetaService: TarjetaServicesService
-  )
-  {
+  ) {
     this.form = this.fb.group({
-    titular: ['',Validators.required],
-    numeroTarjeta: ['',[Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
-    fechaExpiracion: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
-    cvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]]
+      titular: ['', Validators.required],
+      numeroTarjeta: ['', [Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
+      fechaExpiracion: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
+      cvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]]
     });
   }
 
@@ -40,14 +43,29 @@ export class TarjetaCreditoComponent {
   /**
    * name
    */
-  public agregarTarjeta() {
+  public guardarTarjeta() {
 
     const nuevaTarjeta = {
+      id:this.idEditar,
       titulas: this.form.get('titular')?.value,
       numeroTarjeta: this.form.get('numeroTarjeta')?.value,
       fechaExpiracion: this.form.get('fechaExpiracion')?.value,
       cvv: this.form.get('cvv')?.value
     };
+
+    if (this.state) {
+      this.tarjetaService.editTarjeta(this.idEditar!, nuevaTarjeta).subscribe(data => {
+        this.toastr.info('Tarjeta editada', 'La tarjeta fue editada con exito!');
+        this.obtenerTarjetas();
+        this.form.reset();
+        this.state = false;
+        this.accion = 'Agregar';
+        this.cambiarBoton = 'Agregar';
+        this.idEditar = undefined;
+      }, error => {
+        console.log(error);
+      });
+    }
     this.tarjetaService.addTarjeta(nuevaTarjeta).subscribe(data => {
       this.toastr.success('Tarjeta registrada', 'La tarjeta fue registrada con exito!');
       this.obtenerTarjetas();
@@ -57,12 +75,16 @@ export class TarjetaCreditoComponent {
     });
 
 
+
+
+
+
   }
 
   /**
    * name
    */
-  public eliminarTarjeta(index:number) {
+  public eliminarTarjeta(index: number) {
     console.log(index);
 
     this.tarjetaService.deleteTarjeta(index).subscribe(data => {
@@ -81,15 +103,40 @@ export class TarjetaCreditoComponent {
     this.tarjetaService.getAllTarjetas().subscribe(data => {
       console.log(data);
       this.listTarjetas = data.map((tarjeta: any) => ({
-      id: tarjeta.id,
-      titular: tarjeta.titulas, // <-- ojo, era 'titulas' mal escrito
-      numeroTarjeta: tarjeta.numeroTarjeta,
-      fechaExpiracion: tarjeta.fechaExpiracion,
-      cvv: tarjeta.cvv
-    }));
+        id: tarjeta.id,
+        titular: tarjeta.titulas, // <-- ojo, era 'titulas' mal escrito
+        numeroTarjeta: tarjeta.numeroTarjeta,
+        fechaExpiracion: tarjeta.fechaExpiracion,
+        cvv: tarjeta.cvv
+      }));
     }, error => {
       console.log(error);
     });
+  }
+
+  /**
+   * editarTarjeta
+   */
+  public editarTarjeta(id: number) {
+    this.state = true;
+    this.accion = 'Editar';
+    this.cambiarBoton = 'Editar';
+    this.idEditar = id;
+    const nuevaTarjeta = this.listTarjetas.find(tarjeta => tarjeta.id === id);
+
+    this.form.patchValue({
+      id: id,
+      titular: nuevaTarjeta.titular,
+      numeroTarjeta: nuevaTarjeta.numeroTarjeta,
+      fechaExpiracion: nuevaTarjeta.fechaExpiracion,
+      cvv: nuevaTarjeta.cvv
+    });
+
+
+
+
+
+
   }
 
 

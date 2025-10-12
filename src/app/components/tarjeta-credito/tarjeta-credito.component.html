@@ -19,9 +19,9 @@
     <div class="col-lg-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="titulo">Agregar tarjeta</h5>
+          <h5 class="titulo">{{ accion | uppercase}} Tarjeta</h5>
 
-          <form [formGroup]="form" (ngSubmit)="agregarTarjeta()">
+          <form [formGroup]="form" (ngSubmit)="guardarTarjeta()">
 
             <div class="input-group mb-3">
               <span class="input-group-text">
@@ -103,7 +103,7 @@
 
 
             <div class="d-grid gap-2">
-            <button [disabled]="this.form.invalid" type="submit" class="btn btn-success btn-lg">Agregar</button>
+            <button [disabled]="this.form.invalid" type="submit" class="btn btn-success btn-lg">{{cambiarBoton}}</button>
             </div>
 
           </form>
@@ -124,7 +124,7 @@
                 <td>{{item.numeroTarjeta}}</td>
                 <td>{{item.fechaExpiracion}}</td>
                 <td>
-                  <i class="fa-solid fa-pen-to-square text-primary"></i>
+                  <i (click)="editarTarjeta(item.id)" class="fa-solid fa-pen-to-square text-primary"></i>
                 </td>
                 <td>
                   <i (click)="eliminarTarjeta(item.id)" class="fa-solid fa-trash text-danger"></i>

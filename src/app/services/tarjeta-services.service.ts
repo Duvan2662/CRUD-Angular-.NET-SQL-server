@@ -23,4 +23,8 @@ export class TarjetaServicesService {
     return this.http.post(this.Backend_Url, tarjeta);
   }
 
+  editTarjeta(id:number, tarjeta:any): Observable<any>{
+    return this.http.put(this.Backend_Url + '/' + id, tarjeta);
+  }
+
 }
