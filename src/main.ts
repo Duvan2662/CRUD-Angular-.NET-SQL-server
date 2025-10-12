@@ -5,10 +5,5 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 
 
-bootstrapApplication(AppComponent, {
-  providers: [
-     provideAnimations(), // required animations providers
-     provideToastr(), // Toastr providers
-  ]
-})
+bootstrapApplication(AppComponent, appConfig,)
   .catch((err) => console.error(err));

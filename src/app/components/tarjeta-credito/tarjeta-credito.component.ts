@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormGroup, ReactiveFormsModule,FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { TarjetaServicesService } from '../../services/tarjeta-services.service';
 
 @Component({
   selector: 'app-tarjeta-credito',
@@ -10,6 +11,13 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './tarjeta-credito.component.css'
 })
 export class TarjetaCreditoComponent {
+
+
+  tarjetaClase= {
+    titular: '',
+    numeroTarjeta: '',
+    fechaExpiracion: '',
+  }
 
   listTarjetas: any[] = [
     { titular: 'Juan Perez', numeroTarjeta: '1234 5678 9012 3456', fechaExpiracion: '12/24', cvv: '123' },
@@ -20,7 +28,8 @@ export class TarjetaCreditoComponent {
 
   constructor(
     private fb: FormBuilder,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private tarjetaService: TarjetaServicesService
   )
   {
     this.form = this.fb.group({
@@ -29,7 +38,10 @@ export class TarjetaCreditoComponent {
     fechaExpiracion: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
     cvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]]
     });
+  }
 
+  ngOnInit(): void {
+    this.obtenerTarjetas();
   }
 
   /**
@@ -58,6 +70,24 @@ export class TarjetaCreditoComponent {
   public eliminarTarjeta(index:number) {
     this.listTarjetas.splice(index,1);
     this.toastr.error('Tarjeta eliminada', 'La tarjeta fue eliminada con exito!');
+  }
+
+  /**
+   * obtenerTarjetas
+   */
+  public obtenerTarjetas() {
+    this.tarjetaService.getAllTarjetas().subscribe(data => {
+      console.log(data);
+      for (let tarjeta of data) {
+        this.listTarjetas.push({
+          "titular":tarjeta.titulas,
+          "numeroTarjeta":tarjeta.numeroTarjeta,
+          "fechaExpiracion":tarjeta.fechaExpiracion,
+          "cvv":tarjeta.cvv});
+      }
+    }, error => {
+      console.log(error);
+    });
   }
 
 
