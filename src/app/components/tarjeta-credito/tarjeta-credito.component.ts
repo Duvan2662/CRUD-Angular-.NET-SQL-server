@@ -41,19 +41,21 @@ export class TarjetaCreditoComponent {
    * name
    */
   public agregarTarjeta() {
-    console.log(this.form.value);
 
     const nuevaTarjeta = {
-      titular: this.form.get('titular')?.value,
+      titulas: this.form.get('titular')?.value,
       numeroTarjeta: this.form.get('numeroTarjeta')?.value,
       fechaExpiracion: this.form.get('fechaExpiracion')?.value,
       cvv: this.form.get('cvv')?.value
     };
-    console.log(nuevaTarjeta);
+    this.tarjetaService.addTarjeta(nuevaTarjeta).subscribe(data => {
+      this.toastr.success('Tarjeta registrada', 'La tarjeta fue registrada con exito!');
+      this.obtenerTarjetas();
+      this.form.reset();
+    }, error => {
+      console.log(error);
+    });
 
-    this.listTarjetas.push(nuevaTarjeta);
-    this.toastr.success('Tarjeta registrada', 'La tarjeta fue registrada con exito!');
-    this.form.reset();
 
   }
 

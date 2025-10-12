@@ -19,4 +19,8 @@ export class TarjetaServicesService {
     return this.http.delete(this.Backend_Url + '/' + id);
   }
 
+  addTarjeta(tarjeta:any): Observable<any>{
+    return this.http.post(this.Backend_Url, tarjeta);
+  }
+
 }
